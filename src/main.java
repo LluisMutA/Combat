@@ -28,7 +28,7 @@ public class main {
             dibuixaEstrategies(estratHuma, estratBot, 1,1);
             lluita(jugadorHuma, bot, estratHuma, estratBot);
             Screen.printScreen();
-            espera4Segons();
+            espera2Segons();
         }
     }
 
@@ -37,10 +37,16 @@ public class main {
         Screen.drawText(55, 6, String.format("%s [%d]",e2.toString(), p2));
     }
 
-    static void espera4Segons() {
+    static void espera2Segons() {
         try {
-            Thread.sleep(1000*4);
+            Thread.sleep(1000*2);
           } catch (Exception e){
+        }
+    }
+    static void esperaMigSegon() {
+        try {
+            Thread.sleep(500);
+        } catch (Exception e){
         }
     }
 
@@ -48,30 +54,55 @@ public class main {
         // Esborra la pantalla
         Screen.fillScreen(' ');
         // Dibuixa les capses
-        Screen.drawBox(0,0,42,10);
-        Screen.drawBox(43, 0, 42, 10);
+        Screen.drawBox(0, 0, 42, 7);
+        Screen.drawBox(43, 0, 42, 7);
         // Dibuixa la info del jugador
         dibuixaInfoJugador(l1, 2, 1, mostraPersonatges);
         dibuixaInfoJugador(l2, 45, 1, mostraPersonatges);
 
-        if (!mostraPersonatges){
+        if (!mostraPersonatges) {
             Screen.drawGraphics(30, 7, Screen.fight);
         }
     }
 
     static void dibuixaInfoJugador(Lluitador lluitador, int x, int y, boolean mostraGrafic) {
-        Screen.drawText(x,y+1,String.format("%s [%s]", lluitador.getNom(), lluitador.getTipus()));
-        Screen.drawText(x,y+2, String.format("Vida: %d/ %d", lluitador.getPuntsVida(), lluitador.puntsVidaMaxim));
-        Screen.drawText(x,y+3, String.format("Atac: %d", lluitador.ATK));
-        Screen.drawText(x,y+4, String.format("Defensa: %d", lluitador.DEF));
-        Screen.drawText(x,y+5, String.format("Arma: %s", lluitador.arma));
+        Screen.drawText(x,y,String.format("%s [%s]", lluitador.getNom(), lluitador.getTipus()));
+        Screen.drawText(x,y+1, String.format("Vida: %d/ %d", lluitador.getPuntsVida(), lluitador.puntsVidaMaxim));
+        Screen.drawText(x,y+2, String.format("Atac: %d", lluitador.ATK));
+        Screen.drawText(x,y+3, String.format("Defensa: %d", lluitador.DEF));
+        Screen.drawText(x,y+4, String.format("Arma: %s", lluitador.arma));
         String graphic = "";
         if (lluitador.getTipus() == Lluitador.tipusJugador.Mag) graphic = Screen.mag;
-        if (lluitador.getTipus() == Lluitador.tipusJugador.Mag) graphic = Screen.ogre;
-        if (lluitador.getTipus() == Lluitador.tipusJugador.Mag) graphic = Screen.cavaller;
-
+        if (lluitador.getTipus() == Lluitador.tipusJugador.Ogre) graphic = Screen.ogre;
+        if (lluitador.getTipus() == Lluitador.tipusJugador.Cavaller) graphic = Screen.cavaller;
+        if (lluitador.getTipus() == Lluitador.tipusJugador.Elf) graphic = Screen.elf;
+        if (lluitador.getTipus() == Lluitador.tipusJugador.Dracònid) graphic = Screen.dracònid;
         if (mostraGrafic) {
-            Screen.drawGraphics(x, 6, graphic);
+            Screen.drawGraphics(x, 10, graphic);
+        }
+    }
+
+    static void fight(int x, int y){
+        Screen.drawGraphics(x, 10, Screen.fight);
+        esperaMigSegon();
+        Screen.drawGraphics(x, 10, Screen.fight2);
+        esperaMigSegon();
+    }
+
+    static void animFight (boolean mostraS){
+        String s1 = "";
+        String s2 = "";
+        for (int i = 0; i < 5; i++) {
+            s1 = Screen.fight;
+            if(mostraS){
+            Screen.drawGraphics(0,10, s1);
+            }
+            esperaMigSegon();
+            s2 = Screen.fight2;
+            if(mostraS){
+                Screen.drawGraphics(0,10, s2);
+            }
+            esperaMigSegon();
         }
     }
 
@@ -93,7 +124,7 @@ public class main {
 
         dibuixaEstrategies(e1, e2, power1, power2);
 
-        if (!resultatCombat(l1, l2, e1, e2, power1, power2));
+        if (!resultatCombat(l1, l2, e1, e2, power1, power2))
         resultatCombat(l2, l1, e2, e1, power2, power1);
     }
 
@@ -191,19 +222,28 @@ public class main {
        lluitador.setTipus(tipus);
 
         if (lluitador.getTipus() == Lluitador.tipusJugador.Mag){
+            lluitador.setPuntsVidaMaxim(20);
+            lluitador.setATK(25);
+            lluitador.setDEF(15);
+        } else if (lluitador.getTipus() == Lluitador.tipusJugador.Cavaller) {
             lluitador.setPuntsVidaMaxim(30);
             lluitador.setATK(10);
-            lluitador.setDEF(12);
-        } else if (lluitador.getTipus() == Lluitador.tipusJugador.Cavaller) {
-            lluitador.setPuntsVidaMaxim(25);
-            lluitador.setATK(11);
-            lluitador.setDEF(9);
+            lluitador.setDEF(20);
         }else if (lluitador.getTipus() == Lluitador.tipusJugador.Ogre) {
-            lluitador.setPuntsVidaMaxim(35);
+            lluitador.setPuntsVidaMaxim(25);
             lluitador.setATK(15);
-            lluitador.setDEF(4);
+            lluitador.setDEF(20);
+        }else if (lluitador.getTipus() == Lluitador.tipusJugador.Elf) {
+            lluitador.setPuntsVidaMaxim(20);
+            lluitador.setATK(27);
+            lluitador.setDEF(13);
+        }else if (lluitador.getTipus() == Lluitador.tipusJugador.Dracònid) {
+            lluitador.setPuntsVidaMaxim(25);
+            lluitador.setATK(30);
+            lluitador.setDEF(5);
         }
-        lluitador.setPuntsVida(20);
+        lluitador.setArma(Lluitador.tipusArma.Desarmat);
+        lluitador.setPuntsVida(lluitador.getPuntsVidaMaxim());
         lluitador.setNivell(1);
         lluitador.setPuntsDoblers(0);
         return lluitador;

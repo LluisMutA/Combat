@@ -8,7 +8,7 @@ public class Lluitador {
         return ar[index];
     }
     enum tipusArma{
-        Espasa, Arc, Bastó, Llança, Daga
+        Espasa, Llança, Basto, Arc, Daga, Desarmat
     }
 
     enum tipusJugador {
@@ -62,6 +62,14 @@ public class Lluitador {
 
     public void setTipus(tipusJugador tipus) {
         this.tipus = tipus;
+    }
+
+    public tipusArma getArma() {
+        return arma;
+    }
+
+    public void setArma(tipusArma arma) {
+        this.arma = arma;
     }
 
     public int getNivell() {
