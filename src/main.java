@@ -19,16 +19,41 @@ public class main {
 
         Lluitador bot = creaLluitador("skynet", Lluitador.tipusAleatori());
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i  < 999; i++) {
             dibuixaPantalla(jugadorHuma, bot, true);
             Screen.printScreen();
             Estrategia estratHuma = triaEstrategiaHuma();
-            Estrategia estratBot= triaEstrategiaBot();
+            Estrategia estratBot = triaEstrategiaBot();
             dibuixaPantalla(jugadorHuma, bot, false);
-            dibuixaEstrategies(estratHuma, estratBot, 1,1);
+            dibuixaEstrategies(estratHuma, estratBot, 1, 1);
             lluita(jugadorHuma, bot, estratHuma, estratBot);
             Screen.printScreen();
-            espera2Segons();
+            esperaXSegons(2);
+
+            if (jugadorHuma.puntsVida <= 0) {
+                Screen.fillScreen(' ');
+                Screen.drawGraphics(2,10,Screen.gameover);
+                Screen.printScreen();
+                break;
+            }
+            if (bot.puntsVida <= 0) {
+                jugadorHuma.nivell++;
+                bot.nivell++;
+                bot.puntsVida = bot.puntsVidaMaxim + 10;
+                bot.puntsVidaMaxim = bot.puntsVidaMaxim + 10;
+                jugadorHuma.puntsVida = jugadorHuma.puntsVidaMaxim + 10;
+                jugadorHuma.puntsVidaMaxim = jugadorHuma.puntsVidaMaxim + 10;
+                jugadorHuma.ATK = jugadorHuma.ATK + 3;
+                jugadorHuma.DEF = jugadorHuma.DEF + 3;
+                bot.ATK = bot.ATK +3;
+                bot.DEF = bot.DEF + 3;
+            }
+            if (jugadorHuma.nivell == 5) {
+                Screen.fillScreen(' ');
+                Screen.drawGraphics(2, 10, Screen.victoria);
+                Screen.printScreen();
+                break;
+            }
         }
     }
 
@@ -37,31 +62,26 @@ public class main {
         Screen.drawText(55, 6, String.format("%s [%d]",e2.toString(), p2));
     }
 
-    static void espera2Segons() {
+    static void esperaXSegons(int s) {
         try {
-            Thread.sleep(1000*2);
+            Thread.sleep(s);
           } catch (Exception e){
-        }
-    }
-    static void esperaMigSegon() {
-        try {
-            Thread.sleep(500);
-        } catch (Exception e){
         }
     }
 
     static void dibuixaPantalla(Lluitador l1, Lluitador l2, boolean mostraPersonatges) {
         // Esborra la pantalla
         Screen.fillScreen(' ');
-        // Dibuixa les capses
-        Screen.drawBox(0, 0, 42, 7);
-        Screen.drawBox(43, 0, 42, 7);
-        // Dibuixa la info del jugador
-        dibuixaInfoJugador(l1, 2, 1, mostraPersonatges);
-        dibuixaInfoJugador(l2, 45, 1, mostraPersonatges);
+        if (mostraPersonatges) {
+            // Dibuixa les capses
+            Screen.drawBox(0, 0, 42, 7);
+            Screen.drawBox(43, 0, 42, 7);
+            // Dibuixa la info del jugador
+            dibuixaInfoJugador(l1, 2, 1, mostraPersonatges);
+            dibuixaInfoJugador(l2, 45, 1, mostraPersonatges);
 
-        if (!mostraPersonatges) {
-            Screen.drawGraphics(30, 7, Screen.fight);
+        }else if (!mostraPersonatges) {
+            Screen.drawGraphics(15, 7, Screen.fight);
         }
     }
 
@@ -70,7 +90,7 @@ public class main {
         Screen.drawText(x,y+1, String.format("Vida: %d/ %d", lluitador.getPuntsVida(), lluitador.puntsVidaMaxim));
         Screen.drawText(x,y+2, String.format("Atac: %d", lluitador.ATK));
         Screen.drawText(x,y+3, String.format("Defensa: %d", lluitador.DEF));
-        Screen.drawText(x,y+4, String.format("Arma: %s", lluitador.arma));
+        Screen.drawText(x,y+4, String.format("Nivell: %s", lluitador.nivell));
         String graphic = "";
         if (lluitador.getTipus() == Lluitador.tipusJugador.Mag) graphic = Screen.mag;
         if (lluitador.getTipus() == Lluitador.tipusJugador.Ogre) graphic = Screen.ogre;
@@ -79,30 +99,6 @@ public class main {
         if (lluitador.getTipus() == Lluitador.tipusJugador.Dracònid) graphic = Screen.dracònid;
         if (mostraGrafic) {
             Screen.drawGraphics(x, 10, graphic);
-        }
-    }
-
-    static void fight(int x, int y){
-        Screen.drawGraphics(x, 10, Screen.fight);
-        esperaMigSegon();
-        Screen.drawGraphics(x, 10, Screen.fight2);
-        esperaMigSegon();
-    }
-
-    static void animFight (boolean mostraS){
-        String s1 = "";
-        String s2 = "";
-        for (int i = 0; i < 5; i++) {
-            s1 = Screen.fight;
-            if(mostraS){
-            Screen.drawGraphics(0,10, s1);
-            }
-            esperaMigSegon();
-            s2 = Screen.fight2;
-            if(mostraS){
-                Screen.drawGraphics(0,10, s2);
-            }
-            esperaMigSegon();
         }
     }
 
@@ -226,7 +222,7 @@ public class main {
             lluitador.setATK(25);
             lluitador.setDEF(15);
         } else if (lluitador.getTipus() == Lluitador.tipusJugador.Cavaller) {
-            lluitador.setPuntsVidaMaxim(30);
+            lluitador.setPuntsVidaMaxim(3);
             lluitador.setATK(10);
             lluitador.setDEF(20);
         }else if (lluitador.getTipus() == Lluitador.tipusJugador.Ogre) {
